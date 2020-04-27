@@ -28,7 +28,6 @@ class Menu extends Component{
                 onPress={()=>navigate('Dishdetail',{dishId:item.id})}
                 leftAvatar={{source:require('./images/uthappizza.png')}}
                 />
-    
             );
         }
     
