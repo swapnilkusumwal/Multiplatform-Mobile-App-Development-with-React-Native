@@ -8,7 +8,7 @@ const state={
     leaders: LEADERS
 };
 function History (){
-        const renderMenuItem=({item,index}) => {
+        const renderAbout=({item,index}) => {
             return(
                 <ListItem
                 key={index}
@@ -47,7 +47,7 @@ function History (){
                         <Card body>
                             <FlatList
                             data={state.leaders}
-                            renderItem={renderMenuItem}
+                            renderItem={renderAbout}
                             keyExtractor={item=>item.id.toString()}/>
                         </Card>
                     </Card>
