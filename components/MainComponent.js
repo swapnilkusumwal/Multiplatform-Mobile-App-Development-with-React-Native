@@ -7,10 +7,26 @@ import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Contact from './ContactComponent';
-import History from './AboutComponent';
+import About from './AboutComponent';
 import {Icon} from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { connect } from 'react-redux';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
+const mapDispatchToProps = dispatch => ({
+    fetchDishes: () => dispatch(fetchDishes()),
+    fetchComments: () => dispatch(fetchComments()),
+    fetchPromos: () => dispatch(fetchPromos()),
+    fetchLeaders: () => dispatch(fetchLeaders()),
+  })
 const CustomDrawerContentComponent=(props)=>{
     return(
     <ScrollView>
@@ -126,8 +142,8 @@ function AboutNavigatorScreen() {
             }}
         >
             <AboutNavigator.Screen
-                name="History"
-                component={History}
+                name="About"
+                component={About}
                 options={
                     ({navigation})=>({
                         headerLeft: ()=>(
@@ -254,7 +270,13 @@ function MainNavigatorScreen(){
 }
 
 class Main extends Component {
-
+    
+    componentDidMount() {
+        this.props.fetchDishes();
+        this.props.fetchComments();
+        this.props.fetchPromos();
+        this.props.fetchLeaders();
+    }
     render() {
 
         return (
@@ -287,4 +309,4 @@ const styles=StyleSheet.create({
         height: 60
       }
 });
-  export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
