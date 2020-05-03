@@ -30,10 +30,10 @@ PODS:
   - EXSQLite (8.1.0):
     - UMCore
     - UMFileSystemInterface
-  - EXUpdates (0.1.2):
+  - EXUpdates (0.1.3):
     - React
     - UMCore
-  - EXWebBrowser (8.2.0):
+  - EXWebBrowser (8.2.1):
     - UMCore
   - FBLazyVector (0.61.5)
   - FBReactNativeSpec (0.61.5):
@@ -459,8 +459,8 @@ SPEC CHECKSUMS:
   EXLocation: bbd487fd96a18a3ad9725389bbb94c4a5f78edf3
   EXPermissions: 24b97f734ce9172d245a5be38ad9ccfcb6135964
   EXSQLite: 877ad6c8eb169353a2f94d5ad26510ffadd46a1f
-  EXUpdates: c8b35afb562139260e904801e031ab3d270acaf1
-  EXWebBrowser: c8abe4e22f30322949da381d4f6faa8d94ba6b59
+  EXUpdates: badd6ceaf867bcf39f7f906121c1e45f621ebb94
+  EXWebBrowser: 5902f99ac5ac551e5c82ff46f13a337b323aa9ea
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
@@ -502,6 +502,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 34f7bb39808b121639328996476d5362e7a724ac
+PODFILE CHECKSUM: 636c457785fc08f9936e98c07c17638e3ad5ddd2
 
 COCOAPODS: 1.8.4
