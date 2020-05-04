@@ -12,6 +12,7 @@ import {Icon} from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+import Reservation from './ReservationComponent';
 
 const mapStateToProps = state => {
   return {
@@ -197,6 +198,41 @@ function ContactNavigatorScreen() {
     );
 }
 
+const ReservationNavigator = createStackNavigator();
+
+function ReservationNavigatorScreen() {
+    return(
+        <ReservationNavigator.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: "#512DA8"
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                    color: "#fff"            
+                }
+            }}
+        >
+            <ReservationNavigator.Screen
+                name="Reservation"
+                component={Reservation}
+                options={
+                    ({navigation})=>({
+                        headerLeft: ()=>(
+                            <Icon
+                                name='menu'
+                                size={24}
+                                color='white'
+                                onPress={()=>navigation.toggleDrawer()}
+                            />
+                        )
+                    })
+                }
+            />            
+        </ReservationNavigator.Navigator>
+    );
+}
+
 const MainNavigator=createDrawerNavigator();
 
 function MainNavigatorScreen(){
@@ -260,6 +296,20 @@ function MainNavigatorScreen(){
                             name='address-card'
                             type='font-awesome'
                             size={22}
+                            color={tintColor}
+                        />
+                    )
+                }}
+            />
+            <MainNavigator.Screen 
+                name="Reserve Table" 
+                component={ReservationNavigatorScreen} 
+                options={{
+                    drawerIcon:({tintColor})=>(
+                        <Icon 
+                            name='cutlery'
+                            type='font-awesome'
+                            size={24}
                             color={tintColor}
                         />
                     )
