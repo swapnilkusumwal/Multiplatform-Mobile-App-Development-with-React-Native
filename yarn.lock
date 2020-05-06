@@ -1978,6 +1978,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+beauty-stars@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/beauty-stars/-/beauty-stars-1.1.0.tgz#4ea511b0dbbf20e66b948af77d285390a523eebc"
+  integrity sha512-h2debWueuXWv3MR3bwGCgqxzBv8bHyf8DagppWN4XAweJ6rhdtyl0uxosiOg6ODyDefYTv8TBcgSe4B3n0THuA==
+
 big-integer@^1.6.44:
   version "1.6.48"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"

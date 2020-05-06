@@ -11,7 +11,7 @@ import About from './AboutComponent';
 import {Icon} from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
-import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders,postComment,addComment } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
 
 const mapStateToProps = state => {
@@ -23,10 +23,12 @@ const mapStateToProps = state => {
   }
 }
 const mapDispatchToProps = dispatch => ({
+    addComment:(dishId, rating, comment, author) => dispatch(addComment(dishId, rating, comment, author)),
+    postComment:(dishId, rating, comment, author) => dispatch(postComment(dishId, rating, comment, author)),
     fetchDishes: () => dispatch(fetchDishes()),
     fetchComments: () => dispatch(fetchComments()),
     fetchPromos: () => dispatch(fetchPromos()),
-    fetchLeaders: () => dispatch(fetchLeaders()),
+    fetchLeaders: () => dispatch(fetchLeaders())
   })
 const CustomDrawerContentComponent=(props)=>{
     return(
