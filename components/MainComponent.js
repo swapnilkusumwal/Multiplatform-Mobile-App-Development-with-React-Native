@@ -8,6 +8,7 @@ import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
+import Favorites from './FavoriteComponent';
 import {Icon} from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
@@ -235,6 +236,41 @@ function ReservationNavigatorScreen() {
     );
 }
 
+const FavoritesNavigator = createStackNavigator();
+
+function FavoritesNavigatorScreen() {
+    return(
+        <FavoritesNavigator.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: "#512DA8"
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                    color: "#fff"            
+                }
+            }}
+        >
+            <FavoritesNavigator.Screen
+                name="Favorites"
+                component={Favorites}
+                options={
+                    ({navigation})=>({
+                        headerLeft: ()=>(
+                            <Icon
+                                name='menu'
+                                size={24}
+                                color='white'
+                                onPress={()=>navigation.toggleDrawer()}
+                            />
+                        )
+                    })
+                }
+            />            
+        </FavoritesNavigator.Navigator>
+    );
+}
+
 const MainNavigator=createDrawerNavigator();
 
 function MainNavigatorScreen(){
@@ -298,6 +334,20 @@ function MainNavigatorScreen(){
                             name='address-card'
                             type='font-awesome'
                             size={22}
+                            color={tintColor}
+                        />
+                    )
+                }}
+            />
+            <MainNavigator.Screen 
+                name="My Favorites" 
+                component={FavoritesNavigatorScreen} 
+                options={{
+                    drawerIcon:({tintColor})=>(
+                        <Icon 
+                            name='heart'
+                            type='font-awesome'
+                            size={24}
                             color={tintColor}
                         />
                     )
