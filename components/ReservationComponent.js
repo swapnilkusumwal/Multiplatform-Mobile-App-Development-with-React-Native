@@ -3,6 +3,8 @@ import {Alert,Text,View,StyleSheet,Picker,Switch,Button,Modal} from 'react-nativ
 import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
+import {Notifications} from 'expo';
+import * as Permissions from 'expo-permissions';
 
 class Reservation extends Component{
     constructor(props){
@@ -43,12 +45,50 @@ class Reservation extends Component{
                 },
                 {
                     text: 'Ok',
-                    onPress: ()=>this.resetForm()
+                    onPress: ()=>{
+                        this.presentLocalNotification(this.state.date);
+                        this.resetForm()
+                    }
                 }
             ],
             {cancelable:false}
         )
         console.log(JSON.stringify(this.state));
+    }
+
+
+    async obtainNotificationPermission() {
+        let permission = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to show notifications');
+            }
+        }
+        Notifications.addListener(this.handleNotification);
+        return permission;
+    }
+
+    async presentLocalNotification(date) {
+        await this.obtainNotificationPermission();
+        Notifications.scheduleLocalNotificationAsync({
+            title: 'Your Reservation',
+            body: 'Reservation for '+ date + ' requested',
+            ios: {
+                sound: true
+            },
+            android: {
+                sound: true,
+                vibrate: true,
+                color: '#512DA8'
+            }
+        },
+        {
+            time: new Date().getTime() + 6000
+        });
+    }
+    handleNotification() {
+        console.log('Listener OK');
     }
     render(){
         return(
