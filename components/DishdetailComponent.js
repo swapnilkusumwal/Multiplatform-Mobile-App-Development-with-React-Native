@@ -33,6 +33,11 @@ function RenderDish(props) {
             return true;
         return false;
     };
+    const recognizeLeftDrag=({moveX,moveY,dx,dy})=>{
+        if(dx > 100)
+            return true;
+        return false;
+    };
     const panResponder=PanResponder.create({
         onStartShouldSetPanResponder:(e,gestureState)=>{
             return true;
@@ -58,6 +63,8 @@ function RenderDish(props) {
                     ],
                     {cancelable:false}
                 )
+            else if(recognizeLeftDrag(gestureState))
+                props.onSlide();
             return true;
         }
     });
@@ -170,7 +177,7 @@ class Dishdetail extends Component {
                     favorite={this.props.favorites.some(el => el === dishId)}
                     onPress={() => this.markFavorite(dishId)}
                     onSelect={()=>this.toggleModal()}
-                    />
+                    onSlide={()=>this.toggleModal()}/>
                 <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
                 <Modal animationType={"fade"} transparent={false}
                     visible={this.state.showModal}
