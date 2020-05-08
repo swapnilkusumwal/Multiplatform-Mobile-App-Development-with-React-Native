@@ -15,6 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders,postComment,addComment } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
+import NetInfo from '@react-native-community/netinfo';
+import Toast from 'react-native-tiny-toast';
 
 const mapStateToProps = state => {
   return {
@@ -428,7 +430,34 @@ class Main extends Component {
         this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
+
+        NetInfo.fetch().then((connectionInfo) => {
+            Toast.show('Initial Network Connectivity Type: '
+                + connectionInfo.type, Toast.LONG)
+        });
+        
+        NetInfo.addEventListener(connectionChange => this.handleConnectivityChange(connectionChange))
     }
+
+    handleConnectivityChange = (connectionInfo) => {
+        switch (connectionInfo.type) {
+            case 'none': 
+                Toast.show ('You are now offline', Toast.LONG);
+                break;
+            case 'wifi':
+                Toast.show ('You are now on WiFi', Toast.LONG);
+                break;
+            case 'cellular':
+                Toast.show ('You are now on Cellular', Toast.LONG);
+                break;
+            case 'unknown' :
+                Toast.show ('You are now have an Unknown connection', Toast.LONG);
+                break;
+            default: 
+                break;
+        }
+    }
+    
     render() {
 
         return (
