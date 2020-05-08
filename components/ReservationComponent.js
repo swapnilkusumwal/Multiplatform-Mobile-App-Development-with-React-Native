@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Alert,Text,View,StyleSheet,Picker,Switch,Button,Modal} from 'react-native';
+import {Alert,Text,View,StyleSheet,Picker,Switch,Button} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
