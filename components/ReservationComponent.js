@@ -58,38 +58,33 @@ class Reservation extends Component{
 
 
     async obtainNotificationPermission() {
-        let permission = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
         if (permission.status !== 'granted') {
-            permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
             if (permission.status !== 'granted') {
                 Alert.alert('Permission not granted to show notifications');
             }
         }
-        Notifications.addListener(this.handleNotification);
         return permission;
     }
 
     async presentLocalNotification(date) {
         await this.obtainNotificationPermission();
-        Notifications.scheduleLocalNotificationAsync({
+        Notifications.presentLocalNotificationAsync({
             title: 'Your Reservation',
             body: 'Reservation for '+ date + ' requested',
             ios: {
-                sound: true
+                sound: true,
+                _displayInForeground: true
             },
             android: {
                 sound: true,
                 vibrate: true,
                 color: '#512DA8'
             }
-        },
-        {
-            time: new Date().getTime() + 6000
         });
     }
-    handleNotification() {
-        console.log('Listener OK');
-    }
+
     render(){
         return(
             <ScrollView>
