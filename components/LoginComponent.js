@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker';
 import {baseUrl} from '../shared/baseUrl';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Asset } from "expo-asset";
+import * as ImageManipulator from "expo-image-manipulator";
 
 class LoginTab extends Component {
 
@@ -123,18 +125,27 @@ class RegisterTab extends Component{
         const cameraPermission=await Permissions.askAsync(Permissions.CAMERA);
         const cameraRollPermission=await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if(cameraPermission.status==='granted' && cameraRollPermission.status==='granted'){
-            let captureImage= await ImagePicker.launchCameraAsync({
+            let capturedImage= await ImagePicker.launchCameraAsync({
                 allowsEditing:true,
                 aspect: [4,3]
             });
-            console.log("HIIII");
-            if(!captureImage.cancelled){
-                this.setState({imageUrl:captureImage.uri})
+            if(!capturedImage.cancelled){
+                this.processImage(capturedImage.uri)
             }
         }
-        else{
-            console.log("SAD");
-        }
+    }
+
+    processImage=async(imageUri)=>{
+        let processedImage=await ImageManipulator.manipulateAsync(
+            imageUri,
+            [
+                {
+                    resize:{width:400}
+                }
+            ],
+            {format:'png'}
+        );
+        this.setState({imageUrl:processedImage.uri});
     }
 
     handleRegister(){
