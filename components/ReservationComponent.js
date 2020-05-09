@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
-import {Alert,Text,View,StyleSheet,Picker,Switch,Button} from 'react-native';
+import {Alert,Text,View,StyleSheet,Picker,Switch,Button,Platform} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
 import {Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
-
+import * as Calendar from 'expo-calendar';
+import Moment from 'react-moment';
 class Reservation extends Component{
     constructor(props){
         super(props);
@@ -13,6 +14,7 @@ class Reservation extends Component{
             guests: 1,
             smoking:false,
             date:new Date(),
+            dateEnd:''
         }
     }
     onChange = (event, selectedDate) => {
@@ -34,6 +36,7 @@ class Reservation extends Component{
         });
     }
     handleReservation(){
+        this.addReservationToCalendar();
         Alert.alert(
             'Your Reservation OK?',
             'Number of Guests: '+this.state.guests+"\nSmoking? "+this.state.smoking+"\nDate and Time: "+this.state.date,
@@ -55,7 +58,6 @@ class Reservation extends Component{
         )
         console.log(JSON.stringify(this.state));
     }
-
 
     async obtainNotificationPermission() {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
@@ -82,6 +84,53 @@ class Reservation extends Component{
                 vibrate: true,
                 color: '#512DA8'
             }
+        });
+    }
+
+    async getDefaultCalendarSource() {
+        const calendars = await Calendar.getCalendarsAsync();
+        const defaultCalendars = calendars.filter(each => each.source.name === 'Default');
+        return defaultCalendars[0].source;
+    }
+
+    async obtainCalendarPermission() {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.CALENDAR);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to calendar');
+            }
+        }
+        return permission;
+    }
+
+    async addReservationToCalendar() {
+        
+        await this.obtainCalendarPermission();
+        
+        let dateCurr = Date.parse(this.state.date);
+        let endDate = new Date(dateCurr + 3600 * 2 * 1000);
+        
+        const defaultCalendarSource=Platform.OS==='ios'?await this.getDefaultCalendarSource()
+        : { isLocalAccount: true, name: 'Expo Calendar' };
+        
+        const defaultCalendarId=await Calendar.createCalendarAsync({
+            title: 'Your Reservation at Con Fusion',
+            color: 'blue',
+            entityType: Calendar.EntityTypes.EVENT,
+            sourceId: defaultCalendarSource.id,
+            source : defaultCalendarSource,
+            name: 'internalCalendarName',
+            ownerAccount: 'personal',
+            accessLevel: Calendar.CalendarAccessLevel.OWNER,
+        });
+
+        await Calendar.createEventAsync(defaultCalendarId, {
+            title: 'Con Fusion Table Reservation',
+            startDate: this.state.date,
+            endDate: endDate,
+            timeZone: 'Asia/Hong_Kong',
+            location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
         });
     }
 
@@ -116,7 +165,7 @@ class Reservation extends Component{
                     <Text style={styles.formLabel}>Date and Time</Text>
                     <DateTimePicker style={{flex:6,marginRight:20}}
                         testID="dateTimePicker"
-                        timeZoneOffsetInMinutes={0}
+                        timeZoneOffsetInMinutes={330}
                         value={this.state.date}
                         mode='datetime'
                         display="default"

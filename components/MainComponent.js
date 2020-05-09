@@ -438,6 +438,10 @@ class Main extends Component {
         
         NetInfo.addEventListener(connectionChange => this.handleConnectivityChange(connectionChange))
     }
+    
+    // componentWillUnmount() {
+    //     NetInfo.removeEventListener(connectionChange => this.handleConnectivityChange(connectionChange))
+    // }
 
     handleConnectivityChange = (connectionInfo) => {
         switch (connectionInfo.type) {
