@@ -9,4 +9,4 @@ On another terminal window mount this folder and enter the command :
 
 expo start
 
-This this start the app.
+This will start the app.
