@@ -69,7 +69,7 @@ class Home extends Component{
           this.animatedValue,
           {
             toValue: 8,
-            duration: 8000,
+            duration: 15000,
             easing: Easing.linear
           }
         ).start(() => this.animate())
@@ -77,37 +77,38 @@ class Home extends Component{
 
     render() {
         const xpos1 = this.animatedValue.interpolate({
-            inputRange: [0, 1, 3, 5, 8],
-            outputRange: [1200, 600, 0, -600, -1200]
+            inputRange: [0, 1, 2, 3, 4,5,6,7],
+            outputRange: [800, 550,300,50,-200,-450,-700,-950]
         })
         const xpos2 = this.animatedValue.interpolate({
-            inputRange: [0, 2, 4, 6, 8],
-            outputRange: [1200, 600, 0, -600, -1200]
+            inputRange: [0, 1, 2, 3, 4,5,6,7],
+            outputRange: [900,650,400,150,-100,-350,-600,-850]
         })
         const xpos3 = this.animatedValue.interpolate({
-            inputRange: [0, 3, 5, 7, 8],
-            outputRange: [1200, 600, 0, -600, -1200 ]
+            inputRange: [0, 1, 2, 3, 4,5,6,7],
+            outputRange: [1000,750,500,250,0,-250,-500,-750]
         })
         return(
-            <View style={{flex:1,flexDirection:'row', justifyContent:'center'}}>
-                <Animated.View style={{ width: '100%', transform: [{translateX: xpos1}]}}>
+            <View style={{flex:1,flexDirection:'column', justifyContent:'center'}}>
+                <Animated.View style={{ width: '100%', transform: [{translateY: xpos1}]}}>
                 <RenderItem item={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
                     isLoading={this.props.dishes.isLoading}
                     erreMess={this.props.dishes.erreMess} 
                     />
                 </Animated.View>
-                <Animated.View style={{ width: '100%', transform: [{translateX: xpos2}]}}>
+                <Animated.View style={{ width: '100%', transform: [{translateY: xpos2}]}}>
                 <RenderItem item={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
                     isLoading={this.props.promotions.isLoading}
                     erreMess={this.props.promotions.erreMess} 
                     />
                 </Animated.View>
-                <Animated.View style={{ width: '100%', transform: [{translateX: xpos3}]}}>
+                <Animated.View style={{ width: '100%', transform: [{translateY: xpos3}]}}>
                 <RenderItem item={this.props.leaders.leaders.filter((leader) => leader.featured)[0]}
                     isLoading={this.props.leaders.isLoading}
                     erreMess={this.props.leaders.erreMess} 
                     />
                 </Animated.View>
+                
             </View>
         );
     }

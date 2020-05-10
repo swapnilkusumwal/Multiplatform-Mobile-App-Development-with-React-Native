@@ -145,7 +145,7 @@ export const addLeaders = (leaders) => ({
 export const postFavorite=(dishId)=>(dispatch)=>{
     setTimeout(()=>{
         dispatch(addFavorite(dishId));
-    },2000);
+    },200);
 };
 
 export const addFavorite=(dishId)=>({
@@ -169,7 +169,7 @@ export const postComment = (dishId,rating,author,comment)=>(dispatch)=>{
     newComment.id='';
     setTimeout(()=>{
         dispatch(addComment(newComment));
-    },2000);
+    },200);
 };
 
 export const deleteFavorite=(dishId)=>({

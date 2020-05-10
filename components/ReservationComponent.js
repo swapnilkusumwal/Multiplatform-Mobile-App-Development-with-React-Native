@@ -1,29 +1,76 @@
 import React,{Component} from 'react';
 import {Alert,Text,View,StyleSheet,Picker,Switch,Button,Platform} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
 import {Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Calendar from 'expo-calendar';
-import Moment from 'react-moment';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 class Reservation extends Component{
     constructor(props){
         super(props);
         this.state={
             guests: 1,
             smoking:false,
-            date:new Date(),
-            dateEnd:''
+            date:"Select Date",
+            realDate:new Date(),
+            realTime:new Date(),
+            fullTime:new Date(),
+            isVisibleDate:false,
+            isVisibleTime:false,
+            time:"Select Time"
         }
     }
-    onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
+    onChangeDate = (selectedDate) => {
+        let date1=selectedDate.toString().split(' ');
+        let date2=date1[0]+" "+date1[1]+" "+date1[2]+" "+date1[3];
+        let full=this.state.fullTime.toString().split(' ');
+        full[0]=date1[0];
+        full[1]=date1[1];
+        full[2]=date1[2];
+        full[3]=date1[3];
+        full=full.join(" ");
+        full=new Date(full);
         this.setState({
-            date:currentDate
+            date:date2,
+            isVisibleDate: false,
+            realDate: selectedDate,
+            fullTime:full
         })
-      };
+    };
     
+    onChangeTime=(selectedTime)=>{
+        let currDate=selectedTime.toString();
+        let date1=currDate.split(' ');
+        let time1=date1[4].split(":");
+        let intTime=parseInt(time1[0],10);
+        let time2=time1[0]+":"+time1[1];
+        let full=this.state.fullTime.toString().split(' ');
+        full[4]=date1[4];
+        full=full.join(" ");
+        full=new Date(full);
+        console.log(full);
+        if(intTime<=11){
+            time2=time1[0]+":"+time1[1]+" AM";
+        }
+        else{
+            var hrs=(parseInt(time1[0],10)-12);
+            if(hrs==0)
+                hrs="12";
+            else if(hrs<=9 && hrs!=0)
+                hrs="0"+hrs.toString();
+            else
+                hrs.hrs.toString();
+            time2=hrs+":"+time1[1]+" PM";
+        }
+        this.setState({
+            time:time2,
+            realTime: selectedTime,
+            isVisibleTime:false,
+            fullTime:full
+        })
+    }
     static navigationOptions={
         title:'Reserve Table'
     }
@@ -31,15 +78,19 @@ class Reservation extends Component{
         this.setState({
             guests: 1,
             smoking:false,
-            date:new Date(),
-            showModal: false
+            date:"Select Date",
+            realDate:new Date(),
+            realTime:new Date(),
+            isVisibleDate:false,
+            isVisibleTime:false,
+            time:"Select Time"
         });
     }
     handleReservation(){
         this.addReservationToCalendar();
         Alert.alert(
             'Your Reservation OK?',
-            'Number of Guests: '+this.state.guests+"\nSmoking? "+this.state.smoking+"\nDate and Time: "+this.state.date,
+            'Number of Guests: '+this.state.guests+"\nSmoking? "+this.state.smoking+"\nDate and Time: "+this.state.fullTime,
             [
                 {
                     text:'Cancel',
@@ -49,7 +100,7 @@ class Reservation extends Component{
                 {
                     text: 'Ok',
                     onPress: ()=>{
-                        this.presentLocalNotification(this.state.date);
+                        this.presentLocalNotification(this.state.fullTime);
                         this.resetForm()
                     }
                 }
@@ -108,7 +159,7 @@ class Reservation extends Component{
         
         await this.obtainCalendarPermission();
         
-        let dateCurr = Date.parse(this.state.date);
+        let dateCurr = Date.parse(this.state.fullTime);
         let endDate = new Date(dateCurr + 3600 * 2 * 1000);
         
         const defaultCalendarSource=Platform.OS==='ios'?await this.getDefaultCalendarSource()
@@ -127,7 +178,7 @@ class Reservation extends Component{
 
         await Calendar.createEventAsync(defaultCalendarId, {
             title: 'Con Fusion Table Reservation',
-            startDate: this.state.date,
+            startDate: this.state.fullTime,
             endDate: endDate,
             timeZone: 'Asia/Hong_Kong',
             location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
@@ -162,27 +213,28 @@ class Reservation extends Component{
                     </Switch>
                 </View>
                 <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Date and Time</Text>
-                    <DateTimePicker style={{flex:6,marginRight:20}}
-                        testID="dateTimePicker"
-                        timeZoneOffsetInMinutes={330}
-                        value={this.state.date}
-                        mode='datetime'
-                        display="default"
-                        type='date'
-                        customStyles={{
-                            dateIcon:{
-                                position:'absolute',
-                                left:0,
-                                top:4,
-                                marginLeft:0
-                            },
-                            dateInput:{
-                                marginLeft:36
-                            }
-                        }}
-                        onChange={this.onChange}
-                    />
+                    <Text style={styles.formLabel}>Date</Text>
+                    <View style={{flex:2}}>
+                    <Button title={this.state.date.toString()} onPress={()=>this.setState({isVisibleDate:true})} />
+                        <DateTimePickerModal
+                            isVisible={this.state.isVisibleDate}
+                            mode="date"
+                            onConfirm={this.onChangeDate}
+                            onCancel={()=>this.setState({isVisibleDate:false})}
+                        />
+                    </View>
+                </View>
+                <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Time</Text>
+                    <View style={{flex:2}}>
+                    <Button title={this.state.time.toString()} onPress={()=>this.setState({isVisibleTime:true})} />
+                        <DateTimePickerModal
+                            isVisible={this.state.isVisibleTime}
+                            mode="time"
+                            onConfirm={this.onChangeTime}
+                            onCancel={()=>this.setState({isVisibleTime:false})}
+                        />
+                    </View>
                 </View>
                 <View style={styles.formRow}>
                     <Button
