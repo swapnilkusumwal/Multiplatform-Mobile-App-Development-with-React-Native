@@ -130,6 +130,8 @@ class RegisterTab extends Component{
                 aspect: [4,3]
             });
             if(!capturedImage.cancelled){
+                console.log("HIHIHIHIH");
+                console.log(capturedImage.uri);
                 this.processImage(capturedImage.uri)
             }
         }
@@ -145,8 +147,9 @@ class RegisterTab extends Component{
                 allowsEditing:true,
                 aspect:[4,3]
             });
-            if(!capturedImage.cancelled)
+            if(!capturedImage.cancelled){
                 this.processImage(capturedImage.uri);
+            }
         }
     }
 
