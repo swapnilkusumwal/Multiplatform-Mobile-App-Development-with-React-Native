@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Alert,Text,View,StyleSheet,Picker,Switch,Button,Platform} from 'react-native';
+import {Alert,Text,View,StyleSheet,Picker,Switch,Button,Platform, Modal, Image, TouchableOpacity} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Animatable from 'react-native-animatable';
 import {Notifications} from 'expo';
@@ -19,7 +19,8 @@ class Reservation extends Component{
             fullTime:new Date(),
             isVisibleDate:false,
             isVisibleTime:false,
-            time:"Select Time"
+            time:"Select Time",
+            isSuccessModalVisible: false,
         }
     }
     onChangeDate = (selectedDate) => {
@@ -246,6 +247,43 @@ class Reservation extends Component{
                     
                 </View>
                 </Animatable.View>
+                <Modal
+                    animationType={'slide'}
+                    visible={this.state.isSuccessModalVisible}
+                    transparent={true}
+                    onRequestClose={() =>
+                        this.setState({ isSuccessModalVisible : false })
+                    }
+                    >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalStyle}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalHeaderText}>RESERVATION SUCCESSFULL</Text>
+                        </View>
+                        <View style={{ padding: 15, alignSelf: 'stretch', alignItems:'center' }}>
+                            <Image
+                                source={require('./images/successful.png')}
+                                style={{ width: 80, height: 50 }}
+                                resizeMode='contain'
+                            />
+                            <Text style={{ color: Colors.green, marginTop: 5, fontWeight:'700', fontSize: 12 }}>Successfully Reserved seat</Text>
+                            <Text style={{ color:'#949EB0', textAlign:'center', marginTop: 5, marginBottom: 15 }}>Congratulations your seat has been reserved!!</Text>
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => { this.setState({
+                                isSuccessModalVisible: false,
+                            }) }}
+                            style={styles.modalBottomButton}
+                        >
+                            <Text
+                            style={{ color: 'white', fontSize: 13, fontWeight: 'bold' }}
+                            >
+                            CLOSE
+                            </Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </ScrollView>
         )
     }
@@ -282,7 +320,49 @@ const styles=StyleSheet.create({
      modalText: {
          fontSize: 18,
          margin: 10
-     }
+     },
+     modalContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(70, 62, 107, 0.85)',
+      },
+      modalHeader: {
+        backgroundColor: Colors.ghostWhite,
+        alignItems: 'center',
+        height: 45,
+        flexDirection: 'row',
+      },
+      modalHeaderText: {
+        color: Colors.black,
+        alignSelf: 'stretch',
+        padding: 15,
+        paddingBottom: 5,
+        flex: 2,
+      },
+      modalCancel: {
+        height: 18,
+        width: 18,
+        tintColor: Colors.darkGrey,
+        marginRight: 15,
+      },
+      modalBottomButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Colors.jungleGreen,
+        alignSelf: 'stretch',
+        height: 40,
+      },
+      modalStyle: {
+        width: 310,
+        alignItems: 'flex-start',
+        backgroundColor: 'white',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#4F4677',
+      },
 });
 
 export default Reservation;
